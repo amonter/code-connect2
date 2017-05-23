@@ -17,6 +17,8 @@ var la;
 //connectMongo();
 
 var filePath = path.join(__dirname, 'latest.csv');
+var fileCountries = path.join(__dirname, 'countries1.json');
+var jsonCountries = JSON.parse(fs.readFileSync(fileCountries, 'utf8'));
 var lines = [];
 
 
@@ -47,6 +49,7 @@ var count = 0;
 
 var collectionOut = db2.get('people');
 collectionOut.find({}).then((docs) => {
+		
 		var collectionData = db2.get('email_data');
 		collectionData.find({}).then((dataDoc) => {
 			console.log(docs.length);
@@ -60,7 +63,24 @@ collectionOut.find({}).then((docs) => {
 							//console.log(theEmail+" "+dataDoc[j].opens);	
 						}			
 					}
-					console.log(docs[i].full_name.trim()+","+theEmail+","+docs[i].company_url+","+docs[i].company+","+docs[i].location.join('|')+" "+count++);
+					var countryFound = false;
+					var countryCode;	
+					for (var prop in jsonCountries.countries) {
+						//console.log("Key:" + prop);
+						//console.log("Value:" + jsonCountries.countries[prop].name);
+						if (docs[i].location[0] == jsonCountries.countries[prop].name){
+							countryFound = true;
+							console.log(jsonCountries.countries[prop].name+" continent "+jsonCountries.countries[prop].currency+" name "+docs[i].full_name);
+						}
+                                        }
+					if (!countryFound){
+						var theLoc = docs[i].location[0];
+						if (theLoc =="SF"|| theLoc =="Seattle" || theLoc =="Miami" || theLoc =="NYC"|| theLoc =="DC") countryCode = jsonCountries.countries.US;
+						console.log(contryCode);
+						//if (countryCode) console.log(contryCode.name+" continent "+contryCode.currency+" name "+docs[i].full_name);
+						//else console.log(docs[i].location[0] +" name "+docs[i].full_name);
+					}
+					//console.log(docs[i].location.join('|'));
 					/*fs.appendFile(filePath, docs[i].full_name.trim()+","+docs[i].email[0].replace(/\"/g, "").trim()+","+docs[i].company_url.trim()+","+docs[i].company.trim()+","+docs[i].location.join('|')+","+theOpens+"\n", function(err) {
 						if(err) {
 							return console.log(err);
