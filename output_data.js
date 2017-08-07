@@ -65,7 +65,7 @@ collectionOut.find({}).then((docs) => {
 					}
 					var countryFound = false;
 					var countryCode;	
-					for (var prop in jsonCountries.countries) {
+					/*for (var prop in jsonCountries.countries) {
 						//console.log("Key:" + prop);
 						//console.log("Value:" + jsonCountries.countries[prop].name);
 						if (docs[i].location[0] == jsonCountries.countries[prop].name){
@@ -79,13 +79,13 @@ collectionOut.find({}).then((docs) => {
 						console.log(contryCode);
 						//if (countryCode) console.log(contryCode.name+" continent "+contryCode.currency+" name "+docs[i].full_name);
 						//else console.log(docs[i].location[0] +" name "+docs[i].full_name);
-					}
+					}*/
 					//console.log(docs[i].location.join('|'));
-					/*fs.appendFile(filePath, docs[i].full_name.trim()+","+docs[i].email[0].replace(/\"/g, "").trim()+","+docs[i].company_url.trim()+","+docs[i].company.trim()+","+docs[i].location.join('|')+","+theOpens+"\n", function(err) {
+					fs.appendFile(filePath, docs[i].full_name.trim()+","+docs[i].email[0].replace(/\"/g, "").trim()+","+docs[i].company_url.trim()+","+docs[i].company.trim()+","+docs[i].location.join('|')+","+theOpens+"\n", function(err) {
 						if(err) {
 							return console.log(err);
 						}
-					});*/	
+					});	
 					}
 			
 			}
