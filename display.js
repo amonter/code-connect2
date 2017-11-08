@@ -87,8 +87,8 @@ rl.question('Tell me who to display: ', (input_answer) => {
 	collectionOut.find({}).then((docs) => {
 				var result;
 				console.log(docs.length);
-				for (var i = 350;i<701;i++){
-					//console.log('the enter');
+				for (var i = 701;i<docs.length;i++){
+					console.log('the enter');
 					var answer = input_answer.toLowerCase();
 					if (answer == 'looking' || answer == 'help'){
 						if (docs[i].match.looking_for){
@@ -101,7 +101,7 @@ rl.question('Tell me who to display: ', (input_answer) => {
 							}	
 						}
 					} else {
-						var continent = findLocation(docs[i]);
+						/*var continent = findLocation(docs[i]);
 						if (answer == 'latam'){
 							if (continent == "SA"){
 								result = docs[i];
@@ -122,21 +122,21 @@ rl.question('Tell me who to display: ', (input_answer) => {
                                                         if (continent == "AS"){
 								result = docs[i];
                                                         } 
-						}
+						}*/
 						
 						if (result){
 							console.log(JSON.stringify(result));
-						} /*else {
+						} else {
 							var theURL = docs[i].company_url.trim();
 								if(theURL){
+									console.log(theURL);
 									if(!theURL.includes('www')) theURL = theURL.replace('://', '://www.');
-									//console.log(theURL);
-									c.queue({uri:theURL, name:docs[i].full_name.trim(), email:docs[i].email[0], searchword:answer});		
+									//c.queue({uri:theURL, name:docs[i].full_name.trim(), email:docs[i].email[0], searchword:answer});		
 								}
-							if(docs[i].location[0].replace(/\"/g, "").trim().toLowerCase() == answer) {
+								/*if(docs[i].location[0].replace(/\"/g, "").trim().toLowerCase() == answer) {
 								console.log(JSON.stringify(docs[i]));
-							}						
-						}*/
+							}*/						
+						}
 					}
 					//console.log(docs[i].full_name.trim()+","+docs[i].email[0].replace(/\"/g, "").trim()+","+docs[i].company_url.trim()+","+docs[i].company.trim()+","+docs[i].location.join('|'));	
 				}

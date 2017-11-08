@@ -19,7 +19,7 @@ var connection = mysql.createConnection({
 
 var count = 0;
 
-var filePath = path.join(__dirname, 'no_url.csv');
+var filePath = path.join(__dirname, 'temp_people.csv');
 var fileCountries = path.join(__dirname, 'countries1.json');
 var jsonCountries = JSON.parse(fs.readFileSync(fileCountries, 'utf8'));
 connection.connect();
@@ -114,12 +114,12 @@ collectionOut.find({}).then((docs) => {
 								countryCode = jsonCountries.countries[prop];
 							}	
 						}
-						if (!countryCode) console.log(docs[i].email[0]+" missing-----"+theLoc);
+						//if (!countryCode) console.log(docs[i].email[0]+" missing-----"+theLoc);
 					} 				
 					
 					//c.queue(docs[i].company_url.trim());	
-					if (!docs[i].company_url.trim()) console.log(docs[i].full_name.trim()+","+docs[i].email[0]+","+docs[i].company.trim());			
-					//console.log(docs[i].location.join('|'));
+					//if (!docs[i].company_url.trim()) console.log(docs[i].full_name.trim()+","+docs[i].email[0]+","+docs[i].company.trim());			
+					if (docs[i].email) console.log(docs[i].full_name.trim()+","+docs[i].email+","+docs[i].company_url.trim()+","+docs[i].company.trim()+","+docs[i].location[0].replace(/\"/g, ""));
 					/*fs.appendFile(filePath, docs[i].full_name.trim()+","+docs[i].email[0].replace(/\"/g, "").trim()+","+docs[i].company_url.trim()+","+docs[i].company.trim()+","+docs[i].location.join('|')+","+theOpens+"\n", function(err) {
 						if(err) {
 							return console.log(err);

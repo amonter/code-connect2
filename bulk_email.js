@@ -8,7 +8,7 @@ var db2 = monk('localhost:27017/globalsouth');
 var mandrill = require('mandrill-api/mandrill');
 var mandrill_client = new mandrill.Mandrill('NHpudxhV9HV6zakj7-gH0A');
 var readline = require('linebyline'),
-      rl = readline('ambassadors.csv');
+      rl = readline('corps.csv');
 
 var count = 0;
 var la;
@@ -48,61 +48,37 @@ var count = 0;
 rl.on('line', function(line, lineCount, byteCount) {
 	 var elements = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                 if (lineCount > 0){
-                        //console.log(elements[0]+" "+elements[1]+" "+elements[2]);
-                        var theEmail = elements[1];
-                        var template  = elements[7];
-			var aLocation = elements[4];
-                        var toSend = elements[6];
-			var formatting = '';
-			//if (formatText.length > 1) formatting = formatText.replace(/([^\\]),/g, '$1\u000B').split('\u000B');
+                        var theName = elements[0].match(/\S+/g);
+			var theEmail = elements[1];
+                        var template  = elements[4];
+			var corp = elements[6];
+			//var intro = elements[5].trim();
                         var collection = db2.get('people');
-			if (toSend == 1){
-				//console.log(theEmail+" "+lineCount);
-				//if (template == 'a')template = "pledge-b";
-				//if (template == 'c')template = "pledge-update";
-				if (template == 's') {
-					template = "pledge-spanish"
-				} else {
-					template = "";
-				}
-				/*if (aLocation == "SF" || aLocation == "NYC" || aLocation == "DC" ||aLocation == "LA"|| aLocation == "Chicago"){
-					template = "pledge-a";	
-				}*/
-			} else {
-				template = '';
-			}
 			
-			//console.log(theEmail+" "+lineCount);
-			collection.findOne({email :theEmail.replace(/\"/g, "")}, function (err, doc) {
-				if (err) console.log(err+" "+theEmail);
-				//console.log(doc.first_name+" res "+count);
-				//count++;
-				if (doc && template){
-					count++;
-					console.log(doc.location[0]+" "+theEmail+" --- "+template+" "+count);
-					sendMail(doc.first_name,doc.email[0].replace(/\"/g, ""),template,formatting,doc.location[0]);
-				} else {
-					//console.log("not found "+theEmail[0]);
-				}	
-				//console.log(theEmail[0]+" ---"+ doc.email[0]+" "+doc.first_name);
-				//if(doc.email[0].length >0) {
-                                        //console.log(doc.email[0]);
-                                        //console.log(template+" "+formating+"  -------------  "+doc.first_name);
-
-					/*for (var j=0; j<lines.length; j++){
-                                                if (lines[j][0] == template){
-                                                        if (formatting.length > 0){
-                                                                console.log(formatting);
-                                                        } else {
-                                                                console.log(lines[j][1]);
-                                                        }
-                                                }
-                                        }*/
-                                        //console.log(doc.company+" company "+theName);         
-                                //} else {
-                                        //console.log('record not found');
-                                //}
-                        })
+			if (template == 'x'){ 
+				console.log(theName[0]+" "+theEmail+" "+template+" "+corp);
+				sendMail(theName[0],theEmail.replace(/\"/g, ""),"corporate",corp,"");
+			}			
+			/*if (template == 'x'){
+				collection.findOne({email :theEmail[0].replace(/\"/g, "")}, function (err, doc) {
+					if (err) console.log(err+" () "+theEmail);
+					var aLocation = doc.location[0].replace(/\"/g, "").trim();
+					var emailSend = doc.email[0].trim();
+					if (typeof doc.email === 'string') emailSend = doc.email.trim();
+					if (aLocation == 'SF' || aLocation == 'NYC'){			
+						count++;
+						if (doc.match.looking_for){
+							console.log(emailSend+" "+doc.match.looking_for);							
+							sendMail(doc.first_name,emailSend,"lookingfor-set",doc.match.looking_for.toString(),"");
+	
+						} else {
+							console.log(emailSend+" lookigfor-ask");
+							sendMail(doc.first_name,emailSend,"lookingfor-ask","","");
+						}
+						console.log(count);
+					}
+				})
+			}*/
 		}	
 	}).on('error', function(e) {
 	// something went wrong 
@@ -139,7 +115,7 @@ var template_content = [{
         "content": "example content"
 }];
 
-var merge = [{"name": "firstname","content": name},{"name": "location","content": theLocation}];
+var merge = [{"name": "firstname","content": name},{"name": "corp","content": format}];
 /*if (template == "d-temp"){
 	merge = [{"name": "firstname","content": name},{"name": "partone","content": format[0].replace(/\\/g, '').replace(/\"/g, "")},{"name": "parttwo","content": format[1].replace(/\\/g, '')},
 {"name": "partthree","content": format[2].replace(/\\/g, '').replace(/\"/g, "")}]

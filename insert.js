@@ -8,7 +8,7 @@ var db2 = monk('localhost:27017/globalsouth');
 var mandrill = require('mandrill-api/mandrill');
 var mandrill_client = new mandrill.Mandrill('NHpudxhV9HV6zakj7-gH0A');
 var readline = require('linebyline'),
-      rl = readline('late_adds2.csv');
+      rl = readline('temp_people.csv');
 
 
 
@@ -17,11 +17,17 @@ rl.on('line', function(line, lineCount, byteCount) {
         var elements = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
         if (lineCount > 0){
                 var theName = elements[0].match(/\S+/g);
-                //console.log(elements[0]+" "+elements[1]+" "+elements[2]);
-                var theEmail = elements[1].split(',');;
-                var companyLink = theEmail[0].split('@');
+                var theEmail = elements[1];
+               	var companyURL = elements[2]; 
+		var companyName = elements[3];
+		var theLocation = elements[4].split(',');
+		var comments = '';
+                var tags = '';
+
+		//normal version
+		/*var companyLink = theEmail[0].split('@');
 		var companyURL = "http://"+companyLink[1];
-               	if (companyLink[1] == 'gmail.com' || companyLink[1] == 'yahoo.com' || companyLink[1] =='hotmail.com')companyURL = ''; 
+               	//if (companyLink[1] == 'gmail.com' || companyLink[1] == 'yahoo.com' || companyLink[1] =='hotmail.com')companyURL = ''; 
 		var companyArray = elements[2];
 		var theLocation = elements[3].split(',');
 		var comments = '';
@@ -39,7 +45,7 @@ rl.on('line', function(line, lineCount, byteCount) {
 							
 		} else {
 			companyName = profileCompany[0];		
-		}
+		}*/
 		
 		//console.log(tags);
 		//console.log(theName+" "+companyName+" "+theLocation+" "+position);
@@ -56,6 +62,7 @@ rl.on('line', function(line, lineCount, byteCount) {
 					"company": companyName,
 					"comments": comments,
 					"location": theLocation,
+					"match":{},
 					"tags": tags
                                         }, function (err, doc) {
 					    	//console.log(err+" "+doc);

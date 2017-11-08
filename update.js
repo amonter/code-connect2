@@ -8,7 +8,7 @@ var db2 = monk('localhost:27017/globalsouth');
 var mandrill = require('mandrill-api/mandrill');
 var mandrill_client = new mandrill.Mandrill('NHpudxhV9HV6zakj7-gH0A');
 var readline = require('linebyline'),
-      rl = readline('partners_3.csv');
+      rl = readline('temp_loc.csv');
 
 
 
@@ -19,8 +19,18 @@ rl.on('line', function(line, lineCount, byteCount) {
                 var theName = elements[0].match(/\S+/g);
                 //console.log(elements[0]+" "+elements[1]+" "+elements[2]);
                 var theEmail = elements[1];
+		var company = elements[3];
+		//var theLocation = elements[4].split(',');
                         // insert to the DB
-        collection.findOne({email : theEmail}, function (err, doc) {
+		var collection = db2.get('temp_people');
+		collection.update({email : theEmail}, {$set:{company:company}}, function (err, doc) {
+				if (err){
+					console.log('problem updating '+err);
+				} else {
+					console.log("updated");
+				} 				
+		})
+        /*collection.findOne({email : theEmail}, function (err, doc) {
                         if(!doc) {
 				collection.insert({
                                         "first_name" : theName[0],
@@ -42,7 +52,7 @@ rl.on('line', function(line, lineCount, byteCount) {
 					}
 					})
 			}	
-	});
+	});*/
 	}
 })
 
